@@ -23,7 +23,7 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
-Widget calcbutton(String btntext, Color btncolor, Color textcolor){
+  Widget calcbutton(String btntext, Color btncolor, Color textcolor){
   return Container(
       child: ElevatedButton(onPressed:((){
         calculation(btntext);
@@ -36,9 +36,14 @@ Widget calcbutton(String btntext, Color btncolor, Color textcolor){
   Widget build(BuildContext context) {
 return Scaffold(
   backgroundColor: Colors.black,
-  appBar: AppBar(title: Text('Calculator'),
-  backgroundColor: Colors.black,
+
+  appBar: AppBar(
+    title: Text(expression), // This line displays the expression in the AppBar
+    backgroundColor: Colors.black,
   ),
+  // appBar: AppBar(title: Text('Calculator'),
+  // backgroundColor: Colors.black,
+  // ),
   body: Padding(
     padding: const EdgeInsets.symmetric(horizontal: 5),
     child: Column(mainAxisAlignment: MainAxisAlignment.end,
@@ -116,44 +121,70 @@ dynamic result='';
 dynamic finalresult='';
 dynamic operator='';
 dynamic preoperator='';
+dynamic expression = '';
 
-void calculation(btntext){
-  if(btntext=='AC'){
-    text='0';
-    numOne=0;
-    numTwo=0;
-    result='';
-    finalresult='0';
-    operator='';
-    preoperator='';
+void calculation(btntext) {
+  if (btntext == 'AC') {
+    text = '0';
+    numOne = 0;
+    numTwo = 0;
+    result = '';
+    finalresult = '0';
+    operator = '';
+    preoperator = '';
   }
-  else if(btntext=='+'|| btntext=='-' || btntext=='*' || btntext=='/' || btntext=='='){
-if(numOne==0){
-  numOne=double.parse(result);
-}
-else{
-  numTwo=double.parse(result);
-}
-if(operator=='+'){
-  finalresult=add();
-}
-else if(operator=='-'){
-  finalresult=sub();
-}
-else if(operator=='*'){
-  finalresult=mul();
-}
-else if(operator=='/'){
-  finalresult=div();
-}
-preoperator=operator;
-operator=btntext;
-result='';
 
-  }
+
+
+
+
+  else
+  if (btntext == '+' || btntext == '-' || btntext == '*' || btntext == '/' ||
+      btntext == '=') {
+    if (numOne == 0) {
+      numOne = double.parse(result);
+    }
+    else {
+      numTwo = double.parse(result);
+    }
+    if (operator == '+') {
+      finalresult = add();
+    }
+    else if (operator == '-') {
+      finalresult = sub();
+    }
+    else if (operator == '*') {
+      finalresult = mul();
+    }
+    else if (operator == '/') {
+      finalresult = div();
+    }
+// //percentage
+//     else if (operator == '%') {
+//       final percentage = (numOne * numTwo) / 100;
+//       finalresult = percentage.toString();
+//     }
+
+    preoperator=operator;
+       operator=btntext;
+       result='';
+}
+
+
+
   else if(btntext=='%'){
-    result=numOne/100;
-    finalresult=containDecimal(result);
+
+    numTwo = double.parse(result);
+    final percentage = (numOne * numTwo) / 100;
+    result = percentage.toString();
+    finalresult = containDecimal(result);
+    expression = '$numOne % $numTwo = $finalresult';
+    
+    // result=numOne/100;
+    // result = result.toString();
+    // finalresult = result;
+    // expression = '$numOne %';
+    // finalresult=containDecimal(result);
 
   }
   else if(btntext=='.'){
@@ -175,12 +206,13 @@ result='';
       result = result + btntext;
     }
     finalresult = result;
+    //expression showing
+    if (numOne == 0) {
+      expression = finalresult;
+    } else {
+      expression = '$numOne $operator $finalresult';
+    }
   }
-
-  // else {
-  //   result=result + btntext;
-  //   finalresult=result;
-  //   }
 setState(() {
   text=finalresult;
 });
